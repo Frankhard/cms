@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xsi:schemaLocation="http://www.springframework.org/schema/data/mongo 
+		http://www.springframework.org/schema/data/mongo/spring-mongo-1.8.xsd
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<!-- DAO接口所在包名，Spring会自动查找其下的类 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.sms.dao" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	</bean>
+
+
+   	
+   	<!--自动扫描IOC组件  -->
+    <context:component-scan base-package="com.sms"></context:component-scan>
+    
+    <!-- 开启aspectj代理 -->
+    <aop:aspectj-autoproxy />
+    
+    <!-- Jackson配置-->
+	<bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper">
+		<property name="serializationInclusion" value="NON_NULL" />
+		<property name="dateFormat">
+			<bean class="java.text.SimpleDateFormat">
+				<constructor-arg value="yyyy-MM-dd HH:mm:ss" />
+			</bean>
+		</property>
+	</bean>
+		
+	<!-- 注解映射支持；JSON转换器 -->
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="objectMapper" ref="objectMapper" />
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/plain;charset=UTF-8</value>
+						<value>application/json;charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+			<!-- 对于字符串类型解析的配置 -->
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">  
+            	<property name="supportedMediaTypes" value = "text/html;charset=UTF-8" />  
+        	</bean> 		
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	
+	<!-- freemarker的配置 -->
+	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="templateLoaderPath" value="/views/" />
+		<property name="defaultEncoding" value="utf-8" />
+		<property name="freemarkerSettings">
+			<props>
+				<prop key="default_encoding">UTF-8</prop>
+				<prop key="output_encoding">UTF-8</prop>
+				<prop key="template_update_delay">10</prop>
+				<prop key="locale">zh_CN</prop>
+				<prop key="datetime_format">yyyy-MM-dd HH:mm</prop>
+				<prop key="date_format">yyyy-MM-dd</prop>
+				<prop key="time_format">HH:mm:ss</prop>
+				<prop key="number_format">#.##</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- FreeMarker视图解析 -->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"></property>
+		<property name="suffix" value=".html" />
+		<property name="contentType" value="text/html;charset=utf-8" />
+		<property name="exposeRequestAttributes" value="true" />
+		<property name="exposeSessionAttributes" value="true" />
+		<property name="exposeSpringMacroHelpers" value="true" />
+		<property name="cache" value="false" />
+		<property name="requestContextAttribute" value="rc"></property>
+	</bean>
+
+	<!-- 配置日志 使用Aop 记录日志注意:
+        1). 此处proxy-target-class="true" 否则Service内的参数会被拦截掉,导致Service内无法获得前台传递的参数
+        2). Service需交给spring容器去管理 -->
+	<aop:config expose-proxy="true" proxy-target-class="true">
+		<aop:aspect id="teslaLogAspect" ref="teslaLog">
+			<!-- 对哪些方法进行日志记录, 此处屏蔽action内的set get方法 -->
+			<aop:pointcut id="teslaLogAOP"
+						  expression="execution(* com.cms.service.impl.*.*(..))"/>
+			<aop:before pointcut-ref="teslaLogAOP" method="doBefore"/>
+			<aop:after pointcut-ref="teslaLogAOP" method="doAfter"/>
+			<aop:around pointcut-ref="teslaLogAOP" method="doAround"/>
+			<aop:after-throwing pointcut-ref="teslaLogAOP"
+								method="doAfterThrowing" throwing="e"/>
+		</aop:aspect>
+	</aop:config>
+
+	<!-- Aop日志类 -->
+	<bean id="teslaLog" class="com.cms.utils.CommonLogger"/>
+</beans>

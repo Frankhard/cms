@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+<meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">
+		<!-- head 中 -->
+		<link rel="stylesheet" href="wui/lib/weui.css">
+		<link rel="stylesheet" href="wui/css/jquery-weui.css">
+		<title>图书查询</title>
+		<style>
+		body{
+			background: #F9F9F9;
+		}
+		</style>
+	</head>
+	
+	
+    <body style="width: 100%;height: 100%;position: absolute">
+    	<div class="weui-search-bar" id="searchBar">
+		  <form class="weui-search-bar__form">
+		    <div class="weui-search-bar__box">
+		      <i class="weui-icon-search"></i>
+		      <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="输入作者或者书名" required="">
+		      <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
+		    </div>
+		    <label class="weui-search-bar__label" id="searchText">
+		      <i class="weui-icon-search"></i>
+		      <span>搜索</span>
+		    </label>
+		  </form>
+           <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
+         </div>
+    	
+    	<!-- 显示列表-->
+    	<!--书名 出版社 出版时间 作者 馆藏位置 可借数量-->
+    	<div class="weui-form-preview">
+			  <div class="weui-form-preview__hd">
+			    <label class="weui-form-preview__label">书名</label>
+			    <em class="weui-form-preview__value">老人与海</em>
+			  </div>
+			  <div class="weui-form-preview__bd">
+			    <div class="weui-form-preview__item">
+			      <label class="weui-form-preview__label">出版社 </label>
+			      <span class="weui-form-preview__value">减速出版社</span>
+			    </div>
+			    
+			    <div class="weui-form-preview__item">
+			      <label class="weui-form-preview__label">出版时间</label>
+			      <span class="weui-form-preview__value">2016-25-65</span>
+			    </div>
+			    
+			    <div class="weui-form-preview__item">
+			      <label class="weui-form-preview__label">作者</label>
+			      <span class="weui-form-preview__value">张珊</span>
+			    </div>
+			    
+			    <div class="weui-form-preview__item">
+			      <label class="weui-form-preview__label">可借数量</label>
+			      <span class="weui-form-preview__value">8</span>
+			    </div>
+			  </div>
+      </div>
+      
+       <!--
+       	作者：@qq.com
+       	时间：2017-04-09
+       	描述：
+       -->
+       <div class="weui-form-preview" style="margin-top: 30px;">
+			  <div class="weui-form-preview__hd">
+			    <label class="weui-form-preview__label">书名</label>
+			    <em class="weui-form-preview__value">老人与海</em>
+			  </div>
+			  <div class="weui-form-preview__bd">
+			    <div class="weui-form-preview__item">
+			      <label class="weui-form-preview__label">出版社 </label>
+			      <span class="weui-form-preview__value">减速出版社</span>
+			    </div>
+			    
+			    <div class="weui-form-preview__item">
+			      <label class="weui-form-preview__label">出版时间</label>
+			      <span class="weui-form-preview__value">2016-25-65</span>
+			    </div>
+			    
+			    <div class="weui-form-preview__item">
+			      <label class="weui-form-preview__label">作者</label>
+			      <span class="weui-form-preview__value">张珊</span>
+			    </div>
+			    
+			    <div class="weui-form-preview__item">
+			      <label class="weui-form-preview__label">可借数量</label>
+			      <span class="weui-form-preview__value">8</span>
+			    </div>
+			  </div>
+			  </div>
+      </div>
+   </body>
+	<script src="wui/lib/jquery-2.1.4.js"></script>
+    <script src="wui/js/jquery-weui.js"></script>
+</html>
